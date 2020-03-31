@@ -1,23 +1,27 @@
 package me.maxime.lighthouse.ui.map;
 
+import android.animation.IntEvaluator;
+import android.animation.ValueAnimator;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +30,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -41,7 +47,9 @@ import me.maxime.lighthouse.ui.lighthouses.phare.LighthouseContent;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnInfoWindowClickListener {
 
+
     private static final int DUREE_ECLAT = 200;
+    private static final boolean SMOOTH_ECLAT = true;
 
     private static final LatLng AIXENPROVENCE;
     private static LatLng START_LOCATION;
@@ -104,51 +112,113 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         for (LighthouseContent.LighthouseItem lighthouseItem : LighthouseContent.ITEMS) {
             LatLng latLng = new LatLng(lighthouseItem.lat, lighthouseItem.lon);
             Log.d("MapFragment", lighthouseItem.couleur);
-            CircleOptions circleOptions = (new CircleOptions()).center(latLng).strokeColor(0).fillColor(Color.parseColor(lighthouseItem.couleur)).radius((lighthouseItem.portee * 1609));
-            this.circles[phareID] = googleMap.addCircle(circleOptions);
+
+            if (SMOOTH_ECLAT) {
+                // The drawable to use for the circle
+                GradientDrawable d = new GradientDrawable();
+                d.setShape(GradientDrawable.OVAL);
+                d.setSize(500, 500);
+                d.setColor(Color.parseColor(lighthouseItem.couleur));
+                d.setStroke(5, Color.TRANSPARENT);
+
+                Bitmap bitmap = Bitmap.createBitmap(d.getIntrinsicWidth()
+                        , d.getIntrinsicHeight()
+                        , Bitmap.Config.ARGB_8888);
+
+                // Convert the drawable to bitmap
+                Canvas canvas = new Canvas(bitmap);
+                d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                d.draw(canvas);
+
+                // Radius of the circle
+                final int radius = lighthouseItem.portee * 1609;
+
+                // Add the circle to the map
+                final GroundOverlay circle = googleMap.addGroundOverlay(new GroundOverlayOptions()
+                        .position(latLng, 2 * radius).image(BitmapDescriptorFactory.fromBitmap(bitmap)));
+
+                ValueAnimator valueAnimator = new ValueAnimator();
+                valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
+                valueAnimator.setRepeatMode(ValueAnimator.RESTART);
+                valueAnimator.setIntValues(0, radius);
+                valueAnimator.setDuration(lighthouseItem.nbEclat * 2 * DUREE_ECLAT);
+                valueAnimator.setEvaluator(new IntEvaluator());
+                valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        float animatedFraction = valueAnimator.getAnimatedFraction();
+                        circle.setDimensions(animatedFraction * radius * 2);
+                    }
+                });
+
+                valueAnimator.start();
+            } else {
+                CircleOptions circleOptions = (new CircleOptions()).center(latLng).strokeColor(0).fillColor(Color.parseColor(lighthouseItem.couleur)).radius((lighthouseItem.portee * 1609));
+                this.circles[phareID] = googleMap.addCircle(circleOptions);
+//                final int radius = lighthouseItem.portee * 1609;
+//                ValueAnimator valueAnimator = new ValueAnimator();
+//                valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
+//                valueAnimator.setRepeatMode(ValueAnimator.RESTART);
+//                valueAnimator.setIntValues(0, radius);
+//                valueAnimator.setDuration(lighthouseItem.nbEclat * 2 * DUREE_ECLAT);
+//                valueAnimator.setEvaluator(new IntEvaluator());
+//                valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+//                final int finalPhareID = phareID;
+//                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                    @Override
+//                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                        float animatedFraction = valueAnimator.getAnimatedFraction();
+//                        circles[finalPhareID].setRadius(animatedFraction * radius * 2);
+//                    }
+//                });
+//
+//                valueAnimator.start();
+            }
             googleMap.addMarker((new MarkerOptions()).position(latLng).title(lighthouseItem.name).snippet(lighthouseItem.region).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_phare_map)));
             googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(MainActivity.getContext(), R.raw.map));
             googleMap.setOnInfoWindowClickListener(this);
             phareID++;
         }
 
-        (new CountDownTimer(500000L, 1000L) {
-            int time = 0;
+        if (!SMOOTH_ECLAT)
+            (new CountDownTimer(500000L, 1000L) {
+                int time = 0;
 
-            @Override
-            public void onTick(long millisUntilFinished) {
-                time++;
-                int phareID = 0;
-                for (LighthouseContent.LighthouseItem phare : LighthouseContent.ITEMS) {
-                    if (time % phare.periode == 0) {
-                        circles[phareID].setVisible(true);
-                    } else {
-                        final int finalPhareID = phareID;
-                        (new CountDownTimer((phare.nbEclat * 2 * 200), 200L) {
-                            boolean visible = false;
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    time++;
+                    int phareID = 0;
+                    for (LighthouseContent.LighthouseItem phare : LighthouseContent.ITEMS) {
+                        if (time % phare.periode == 0) {
+                            circles[phareID].setVisible(true);
+                        } else {
+                            final int finalPhareID = phareID;
+                            (new CountDownTimer((phare.nbEclat * 2 * DUREE_ECLAT), DUREE_ECLAT) {
+                                boolean visible = false;
 
-                            @Override
-                            public void onFinish() {
-                                circles[finalPhareID].setVisible(false);
-                            }
+                                @Override
+                                public void onFinish() {
+                                    circles[finalPhareID].setVisible(false);
+                                }
 
-                            @Override
-                            public void onTick(long param2Long) {
-                                visible ^= true;
-                                circles[finalPhareID].setVisible(visible);
-                            }
-                        }).start();
+                                @Override
+                                public void onTick(long param2Long) {
+                                    visible ^= true;
+                                    circles[finalPhareID].setVisible(visible);
+                                }
+                            }).start();
+                        }
+                        phareID++;
                     }
-                    phareID++;
+
                 }
 
-            }
-
-            @Override
-            public void onFinish() {
-                Toast.makeText(MainActivity.getContext(), "Good Night", Toast.LENGTH_LONG).show();
-            }
-        }).start();
+                @Override
+                public void onFinish() {
+                    Toast.makeText(MainActivity.getContext(), "Good Night", Toast.LENGTH_LONG).show();
+                }
+            }).start();
 
     }
 
