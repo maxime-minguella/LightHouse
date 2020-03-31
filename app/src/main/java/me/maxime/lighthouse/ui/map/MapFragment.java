@@ -139,7 +139,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
 
                 ValueAnimator valueAnimator = new ValueAnimator();
                 valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
-                valueAnimator.setRepeatMode(ValueAnimator.RESTART);
+                valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
                 valueAnimator.setIntValues(0, radius);
                 valueAnimator.setDuration(lighthouseItem.nbEclat * 2 * DUREE_ECLAT);
                 valueAnimator.setEvaluator(new IntEvaluator());
