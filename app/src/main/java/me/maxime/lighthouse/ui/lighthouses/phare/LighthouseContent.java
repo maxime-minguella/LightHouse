@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import me.maxime.lighthouse.JSONParser;
 import me.maxime.lighthouse.MainActivity;
 
 public class LighthouseContent {
@@ -27,10 +28,12 @@ public class LighthouseContent {
     static final String DEFAULT_AUTHOR = "";
     static final String DEFAULT_COLOR = "#22EEEE00";
     static final String DEFAULT_COLOR_STR = "blanc";
-    static final String ROUGE_COLOR = "#22DD0000";
-    static final String ROUGE_COLOR_STR = "rouge";
-    static final String VERT_COLOR = "#2200DD00";
-    static final String VERT_COLOR_STR = "vert";
+    static final String RED_COLOR = "#22DD0000";
+    static final String RED_COLOR_STR = "rouge";
+    static final String GREEN_COLOR = "#2200DD00";
+    static final String GREEN_COLOR_STR = "vert";
+
+    private static String URL = "http://www.laurent-freund.fr/cours/android/phares/web/data/phares_all.json";
 
     private static void addItem(LighthouseItem item) {
         ITEMS.add(item);
@@ -54,6 +57,7 @@ public class LighthouseContent {
     }
 
     public static void loadPhareAllJson() {
+        new ConnectAsyncTask().execute();
         String str = loadStrJson("phares_all.json");
         try {
             JSONObject jSONObject = new JSONObject(str);
@@ -65,10 +69,10 @@ public class LighthouseContent {
                 String couleur;
                 try {
                     couleur = msg.getString("couleur");
-                    if (couleur.equals(ROUGE_COLOR_STR)) {
-                        couleur = ROUGE_COLOR;
-                    } else if (couleur.equals(VERT_COLOR_STR)) {
-                        couleur = VERT_COLOR;
+                    if (couleur.equals(RED_COLOR_STR)) {
+                        couleur = RED_COLOR;
+                    } else if (couleur.equals(GREEN_COLOR_STR)) {
+                        couleur = GREEN_COLOR;
                     } else {
                         couleur = DEFAULT_COLOR;
                     }
@@ -104,34 +108,6 @@ public class LighthouseContent {
         }
     }
 
-    public static void loadPhareJson() {
-        String str = loadStrJson("phares.json");
-        try {
-            JSONObject jObjConnection = null;
-            jObjConnection = new JSONObject(str);
-            JSONObject jsonBix = jObjConnection.getJSONObject("phares");
-            JSONArray jsonA = jsonBix.getJSONArray("liste");
-            for (int i = 0; i < jsonA.length(); i++) {
-                JSONObject msg = (JSONObject) jsonA.get(i);
-                addItem(new LighthouseItem(
-                        msg.getString("id"),
-                        msg.getString("name"),
-                        msg.getString("filename"),
-                        msg.getString("region"),
-                        msg.getInt("construction"),
-                        msg.getInt("hauteur"),
-                        msg.getInt("eclat"),
-                        msg.getInt("periode"),
-                        msg.getInt("portee"),
-                        msg.getInt("automatisation"),
-                        msg.getDouble("lat"),
-                        msg.getDouble("lon")));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     private static String loadStrJson(String fileName) {
         String str = new String();
         try {
@@ -159,65 +135,67 @@ public class LighthouseContent {
         return builder.toString();
     }
 
-    private static class ConnectAsyncTask extends AsyncTask<String, Void, String> {
+    private static class ConnectAsyncTask extends AsyncTask<String, String, JSONObject> {
         private ConnectAsyncTask() {
         }
 
         @Override
-        protected String doInBackground(String... strings) {
-            return null;
+        protected JSONObject doInBackground(String... strings) {
+            JSONParser jParser = new JSONParser();
+            JSONObject json = jParser.getJSONFromUrl(URL);
+            Log.d("ConnectAsyncTask", "JSON downloaded");
+            return json;
         }
-    
-    /*protected String doInBackground(String... param1VarArgs) {
-      Scanner scanner1 = null;
-      param1VarArgs = null;
-      String str2 = param1VarArgs;
-      scanner2 = scanner1;
-      try {
-        URL uRL = new URL();
-        str2 = param1VarArgs;
-        scanner2 = scanner1;
-        this("http://www.laurent-freund.fr/cours/android/phares/versions.json");
-        str2 = param1VarArgs;
-        scanner2 = scanner1;
-        httpURLConnection = (HttpURLConnection)uRL.openConnection();
-        try {
-          BufferedInputStream bufferedInputStream = new BufferedInputStream();
-          this(httpURLConnection.getInputStream());
-          scanner2 = new Scanner();
-          this(bufferedInputStream, "UTF-8");
-        } finally {
-          str2 = str1;
-          scanner2 = scanner1;
-          httpURLConnection.disconnect();
-          str2 = str1;
-          scanner2 = scanner1;
-        } 
-      } catch (MalformedURLException b) {
-        Log.d("PhareContent", "Prb URL database connection");
-      } catch (IOException a) {
-        Log.d("PhareContent", "Prb I/O database connection");
-      }
-      return str1;
-    }*/
-/*
-        protected void onPostExecute(String param1String) {
-            Log.d("PhareContent", param1String);
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
             try {
-                JSONObject jSONObject2 = new JSONObject();
-                JSONObject jSONObject1 = jSONObject2.getJSONObject("version");
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(MainActivity.getContext().getResources().getString(2131951686));
-                stringBuilder.append(" ");
-                stringBuilder.append(jSONObject1.getString("author"));
-                stringBuilder.append(", ");
-                stringBuilder.append(jSONObject1.getString("date"));
-                String str = stringBuilder.toString();
-                Toast.makeText(MainActivity.getContext(), str, 0).show();
-            } catch (JSONException a) {
-                a.printStackTrace();
+                JSONArray jsonA = jsonObject.getJSONObject("phares").getJSONArray("liste");
+                for (int i = 0; i < jsonA.length(); i++) {
+                    JSONObject msg = (JSONObject) jsonA.get(i);
+                    Log.d("ConnectAsyncTask", "Name: " + msg.getString("name"));
+                    String couleur;
+                    try {
+                        couleur = msg.getString("couleur");
+                        if (couleur.equals(RED_COLOR_STR)) {
+                            couleur = RED_COLOR;
+                        } else if (couleur.equals(GREEN_COLOR_STR)) {
+                            couleur = GREEN_COLOR;
+                        } else {
+                            couleur = DEFAULT_COLOR;
+                        }
+                    } catch (JSONException e) {
+                        couleur = DEFAULT_COLOR;
+                    }
+
+                    String auteur;
+                    try {
+                        auteur = msg.getString("auteur");
+                    } catch (JSONException e) {
+                        auteur = DEFAULT_AUTHOR;
+                    }
+
+                    addItem(new LighthouseItem(
+                            msg.getString("id"),
+                            msg.getString("name"),
+                            msg.getString("filename"),
+                            msg.getString("region"),
+                            msg.getInt("construction"),
+                            msg.getInt("hauteur"),
+                            msg.getInt("eclat"),
+                            msg.getInt("periode"),
+                            msg.getInt("portee"),
+                            msg.getInt("automatisation"),
+                            msg.getDouble("lat"),
+                            msg.getDouble("lon"),
+                            couleur,
+                            auteur));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        }*/
+        }
+
     }
 
     public static class LighthouseItem {
