@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#708090</color>
+    <color name="colorPrimaryDark">#333333</color>
+    <color name="colorAccent">#00bcd4</color>
+
+    <color name="transp_light_blue">#aa00bcd4</color>
+    <color name="transp_primary_dark">#aa333333</color>
+
+    <color name="detail_lighthouse_charcoal">#333333</color>
+    <color name="detail_lighthouse_silver">#708090</color>
+</resources>

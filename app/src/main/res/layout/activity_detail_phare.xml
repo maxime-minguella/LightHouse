@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/url"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/detail_lighthouse_silver">
+
+    <TextView
+        android:id="@+id/detail_name"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:layout_marginTop="16dp"
+        android:textSize="24.0sp"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toTopOf="@+id/id_title_construction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/detail_region"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/detail_name" />
+
+    <TextView
+        android:id="@+id/id_title_construction"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="@string/detail_construction"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toTopOf="@+id/id_title_automatisation"
+        app:layout_constraintEnd_toStartOf="@+id/detail_construction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/detail_construction"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="TextView"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toBottomOf="@+id/id_title_construction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/id_title_construction"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/id_title_automatisation"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="@string/detail_automatisation"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toTopOf="@+id/id_title_hauteur"
+        app:layout_constraintEnd_toStartOf="@+id/detail_automatisation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/detail_automatisation"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="TextView"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toBottomOf="@+id/id_title_automatisation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/id_title_automatisation"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/id_title_hauteur"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="@string/detail_hauteur"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toTopOf="@+id/id_title_longitude"
+        app:layout_constraintEnd_toStartOf="@+id/detail_automatisation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/detail_hauteur"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="TextView"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toBottomOf="@+id/id_title_hauteur"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.564"
+        app:layout_constraintStart_toEndOf="@+id/id_title_hauteur"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/id_title_longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="@string/detail_longitude"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toTopOf="@+id/id_title_latitude"
+        app:layout_constraintEnd_toStartOf="@+id/detail_hauteur"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/detail_longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="TextView"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toBottomOf="@+id/id_title_longitude"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.548"
+        app:layout_constraintStart_toEndOf="@+id/id_title_longitude"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/id_title_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="@string/detail_latitude"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/detail_longitude"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <TextView
+        android:id="@+id/detail_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:text="TextView"
+        android:textColor="@color/detail_lighthouse_charcoal"
+        app:layout_constraintBottom_toBottomOf="@+id/id_title_latitude"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.562"
+        app:layout_constraintStart_toEndOf="@+id/id_title_latitude"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <ImageView
+        android:id="@+id/imgDetail"
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        app:layout_constraintBottom_toTopOf="@+id/detail_url"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        app:srcCompat="@drawable/phare_jument" />
+
+    <TextView
+        android:id="@+id/detail_url"
+        android:layout_width="wrap_content"
+        android:layout_height="0.0dip"
+        android:textSize="10.0dip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_weight="1.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/lookup_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:backgroundTint="@color/transp_primary_dark"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        app:srcCompat="@drawable/ic_pin" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

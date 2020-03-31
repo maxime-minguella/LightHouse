@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list"
+    android:name="me.maxime.lighthouse.ui.lighthouses.LighthouseFragment"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginLeft="16.0dip"
+    android:layout_marginRight="16.0dip"
+    android:background="@color/transp_primary_dark"
+    app:layoutManager="LinearLayoutManager"
+    tools:context=".ui.lighthouses.LighthouseFragment"
+    tools:listitem="@layout/fragment_lighthouse" />

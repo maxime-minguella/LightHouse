@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Phares</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_header_title">Les phares de France</string>
+    <string name="nav_header_subtitle"></string>
+    <string name="nav_header_desc">En-tête de navigation</string>
+    <string name="action_settings">Paramètres</string>
+
+    <string name="menu_home">Accueil</string>
+    <string name="menu_map">Carte</string>
+    <string name="menu_lighthouses">Phares</string>
+    <string name="menu_about">A propos</string>
+
+    <string name="video_about_title">Phares de l\'Iroise</string>
+
+    <string name="home_text">Phares</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="detail_construction">Construction</string>
+    <string name="detail_automatisation">Automatisation</string>
+    <string name="detail_region">Région</string>
+    <string name="detail_hauteur">Hauteur</string>
+    <string name="detail_longitude">Longitude</string>
+    <string name="detail_latitude">Latitude</string>
+
+    <string name="text_french" translatable="false">Français</string>
+    <string name="text_english" translatable="false">English</string>
+
+    <string name="api_key" translatable="false">AIzaSyC2Y8N7CNOfOPrW1Fz-kLK9mXOD0NCgXns</string>
+</resources>
