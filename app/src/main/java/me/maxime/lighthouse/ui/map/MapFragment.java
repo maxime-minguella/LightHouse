@@ -2,6 +2,7 @@ package me.maxime.lighthouse.ui.map;
 
 import android.animation.IntEvaluator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,12 +53,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
 
     private static final int DUREE_ECLAT = 200;
     private static final boolean SMOOTH_ECLAT = true;
+    private static boolean IS_LIGHTHOUSES_ALIVE = true;
 
     private static final LatLng AIXENPROVENCE;
     private static LatLng START_LOCATION;
     private static final String[] REQUIRED_SDK_PERMISSIONS = {"android.permission.ACCESS_FINE_LOCATION"};
 
     private Circle[] circles = new Circle[LighthouseContent.ITEMS.size()];
+    private GroundOverlay[] circles2 = new GroundOverlay[LighthouseContent.ITEMS.size()];
 
     static {
         AIXENPROVENCE = new LatLng(43.5283D, 5.4497D);
@@ -78,6 +83,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
         } catch (NullPointerException e) {
             START_LOCATION = AIXENPROVENCE;
         }
+
+        final FloatingActionButton fab = getView().findViewById(R.id.power_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IS_LIGHTHOUSES_ALIVE ^= true;
+                Snackbar.make(view, getResources().getString(R.string.map_power) + " " +
+                        (
+                                IS_LIGHTHOUSES_ALIVE
+                                        ? getResources().getString(R.string.map_power_on)
+                                        : getResources().getString(R.string.map_power_off)
+                        ), Snackbar.LENGTH_SHORT).show();
+                fab.setColorFilter(ContextCompat.getColor(getView().getContext(),
+                        (IS_LIGHTHOUSES_ALIVE ? R.color.power_buttton_on : R.color.power_buttton_off)),
+                        android.graphics.PorterDuff.Mode.SRC_IN);
+                if (SMOOTH_ECLAT)
+                    for (GroundOverlay c : circles2)
+                        c.setVisible(IS_LIGHTHOUSES_ALIVE);
+                else
+                    for (Circle c : circles)
+                        c.setVisible(IS_LIGHTHOUSES_ALIVE);
+            }
+        });
     }
 
     @Override
@@ -136,6 +164,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
                 // Add the circle to the map
                 final GroundOverlay circle = googleMap.addGroundOverlay(new GroundOverlayOptions()
                         .position(latLng, 2 * radius).image(BitmapDescriptorFactory.fromBitmap(bitmap)));
+                this.circles2[phareID] = circle;
+                if (!IS_LIGHTHOUSES_ALIVE) {
+                    circle.setVisible(false);
+                }
 
                 ValueAnimator valueAnimator = new ValueAnimator();
                 valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
@@ -147,8 +179,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
                 valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        float animatedFraction = valueAnimator.getAnimatedFraction();
-                        circle.setDimensions(animatedFraction * radius * 2);
+                        if (IS_LIGHTHOUSES_ALIVE)
+                            circle.setDimensions(valueAnimator.getAnimatedFraction() * radius * 2);
                     }
                 });
 
@@ -190,7 +222,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
                     time++;
                     int phareID = 0;
                     for (LighthouseContent.LighthouseItem phare : LighthouseContent.ITEMS) {
-                        if (time % phare.periode == 0) {
+                        if (IS_LIGHTHOUSES_ALIVE && time % phare.periode == 0) {
                             circles[phareID].setVisible(true);
                         } else {
                             final int finalPhareID = phareID;
@@ -204,8 +236,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
 
                                 @Override
                                 public void onTick(long param2Long) {
-                                    visible ^= true;
-                                    circles[finalPhareID].setVisible(visible);
+                                    if (IS_LIGHTHOUSES_ALIVE) {
+                                        visible ^= true;
+                                        circles[finalPhareID].setVisible(visible);
+                                    }
                                 }
                             }).start();
                         }

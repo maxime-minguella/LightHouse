@@ -25,6 +25,10 @@
     <string name="detail_longitude">Longitude</string>
     <string name="detail_latitude">Latitude</string>
 
+    <string name="map_power">Les phares ont été</string>
+    <string name="map_power_on">allumés</string>
+    <string name="map_power_off">éteints</string>
+
     <string name="text_french" translatable="false">Français</string>
     <string name="text_english" translatable="false">English</string>
 

@@ -1,16 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    map:cameraBearing="0.0"
-    map:cameraTargetLat="43.296482"
-    map:cameraTargetLng="5.36978"
-    map:cameraTilt="30.0"
-    map:cameraZoom="8.0"
-    map:mapType="normal"
-    map:uiCompass="true"
-    tools:context=".ui.map.MapFragment" />
+    android:layout_height="fill_parent">
+
+    <fragment
+        android:id="@+id/fragment_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:cameraBearing="0.0"
+        app:cameraTargetLat="43.296482"
+        app:cameraTargetLng="5.36978"
+        app:cameraTilt="30.0"
+        app:cameraZoom="8.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mapType="normal"
+        app:uiCompass="true"
+        tools:context=".ui.map.MapFragment" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/power_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:clickable="true"
+        android:tint="@color/power_buttton_on"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        app:srcCompat="@android:drawable/ic_lock_power_off" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,9 @@
     <string name="home_text">Lighthouses</string>
     <string name="title_activity_maps">Map</string>
 
-
+    <string name="map_power">The lighthouses were turned</string>
+    <string name="map_power_on">on</string>
+    <string name="map_power_off">off</string>
 
     <string name="detail_construction">Construction</string>
     <string name="detail_automatisation">Automation</string>

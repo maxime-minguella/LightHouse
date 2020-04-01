@@ -7,6 +7,9 @@
     <color name="transp_light_blue">#aa00bcd4</color>
     <color name="transp_primary_dark">#aa333333</color>
 
+    <color name="power_buttton_on">#aa00e550</color>
+    <color name="power_buttton_off">#aaE50027</color>
+
     <color name="detail_lighthouse_charcoal">#333333</color>
     <color name="detail_lighthouse_silver">#708090</color>
 </resources>
