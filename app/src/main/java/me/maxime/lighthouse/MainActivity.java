@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity implements LighthouseFragment.OnL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
-        LighthouseContent.loadPhareAllJson();
+        LighthouseContent.loadAsyncPhareAllJson();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
