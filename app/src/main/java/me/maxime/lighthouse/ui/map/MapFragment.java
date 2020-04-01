@@ -173,7 +173,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
                 valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
                 valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
                 valueAnimator.setIntValues(0, radius);
-                valueAnimator.setDuration(lighthouseItem.nbEclat * 2 * DUREE_ECLAT);
+                valueAnimator.setDuration(lighthouseItem.periode * 2 * DUREE_ECLAT);
                 valueAnimator.setEvaluator(new IntEvaluator());
                 valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
                 valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -225,23 +225,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Activit
                         if (IS_LIGHTHOUSES_ALIVE && time % phare.periode == 0) {
                             circles[phareID].setVisible(true);
                         } else {
-                            final int finalPhareID = phareID;
-                            (new CountDownTimer((phare.nbEclat * 2 * DUREE_ECLAT), DUREE_ECLAT) {
-                                boolean visible = false;
-
-                                @Override
-                                public void onFinish() {
-                                    circles[finalPhareID].setVisible(false);
-                                }
-
-                                @Override
-                                public void onTick(long param2Long) {
-                                    if (IS_LIGHTHOUSES_ALIVE) {
-                                        visible ^= true;
-                                        circles[finalPhareID].setVisible(visible);
-                                    }
-                                }
-                            }).start();
+                            circles[phareID].setVisible(false);
+//                            final int finalPhareID = phareID;
+//                            (new CountDownTimer((phare.nbEclat * 2 * DUREE_ECLAT), DUREE_ECLAT) {
+//                                boolean visible = false;
+//
+//                                @Override
+//                                public void onFinish() {
+//                                    circles[finalPhareID].setVisible(false);
+//                                }
+//
+//                                @Override
+//                                public void onTick(long param2Long) {
+//                                    if (IS_LIGHTHOUSES_ALIVE) {
+//                                        visible ^= true;
+//                                        circles[finalPhareID].setVisible(visible);
+//                                    }
+//                                }
+//                            }).start();
                         }
                         phareID++;
                     }
