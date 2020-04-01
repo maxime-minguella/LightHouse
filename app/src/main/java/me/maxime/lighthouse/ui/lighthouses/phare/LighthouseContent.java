@@ -56,8 +56,11 @@ public class LighthouseContent {
         return null;
     }
 
-    public static void loadPhareAllJson() {
+    public static void loadAsyncPhareAllJson() {
         new ConnectAsyncTask().execute();
+    }
+
+    public static void loadPhareAllJson() {
         String str = loadStrJson("phares_all.json");
         try {
             JSONObject jSONObject = new JSONObject(str);
